@@ -45,6 +45,17 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
 
  5) Implement getAllUsers RESTful Service, @Service, @RestController
 
- 6) Test getAllUsers
+6) Implement getAllUsers dto
+
+     - dto stands for data transfer object
+
+     - exposing entity objects through REST endpoints can pose security issues.  Using a dto we can control which entity 
+         fields should be made available for our REST api
+
+     - refactoring safe and type safe    
+
+     - create UserDto class, refactor UserService and UserController to use dto
+
+ 7) Test getAllUsers
 
 
