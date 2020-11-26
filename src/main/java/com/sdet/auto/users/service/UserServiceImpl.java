@@ -1,6 +1,7 @@
 package com.sdet.auto.users.service;
 
 import com.sdet.auto.users.dto.UserDto;
+import com.sdet.auto.users.exceptions.UserExistsException;
 import com.sdet.auto.users.model.User;
 import com.sdet.auto.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,29 @@ public class UserServiceImpl implements UserService {
         }
 
         return userDtoCollection;
+    }
+
+    @Override
+    public UserDto createUser(UserDto userDto) throws UserExistsException {
+        // logic to check repository if user is present
+        User existingUser = userRepository.findByUsername(userDto.getUser_name());
+        // if user exists, throws an exception
+        if(existingUser != null){
+            throw new UserExistsException("User already exists in User Repository");
+        }
+
+        User user = new User();
+        user.setUsername(userDto.getUser_name());
+        user.setFirstname(userDto.getFirst_name());
+        user.setLastname(userDto.getLast_name());
+        user.setEmail(userDto.getEmail());
+        user.setRole(userDto.getRole());
+
+        // save converted user to database
+        User savedUser = userRepository.save(user);
+
+        userDto.setId(savedUser.getId());
+        // return user dto
+        return userDto;
     }
 }

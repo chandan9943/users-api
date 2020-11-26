@@ -66,4 +66,19 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     
     - add additional assert for UserApplicationTest
 
+ #### 03-create-user
+ 1) implement createUser 
 
+     - go to UserService / service layer create method for createUser
+     
+     - add createUser to UserService and implement UserServiceImpl
+
+     - create UserExistsException class
+     
+     - set server.error.include-stacktrace in application.properties 
+
+     - go to UserController create method for createUser 
+
+         - add @PostMapping, add @RequestBody to param of method.  This is where json body will be passed in.
+
+     - unit test createUser 
