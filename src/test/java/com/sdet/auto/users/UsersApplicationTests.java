@@ -1,13 +1,23 @@
 package com.sdet.auto.users;
 
-import org.junit.jupiter.api.Test;
+import com.sdet.auto.users.controller.UserController;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest
-class UsersApplicationTests {
+import static org.junit.Assert.assertNotNull;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class UsersApplicationTests {
+
+	@Autowired
+	private UserController userController;
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
+		assertNotNull(userController);
 	}
-
 }

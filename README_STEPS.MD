@@ -57,5 +57,13 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
      - create UserDto class, refactor UserService and UserController to use dto
 
  7) Test getAllUsers
+ 
+    - resource: Testing in Spring Boot : https://www.baeldung.com/spring-boot-testing
+ 
+    - add new application-test.properties file for test
+    
+    - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, and UserRepositoryTests
+    
+    - add additional assert for UserApplicationTest
 
 

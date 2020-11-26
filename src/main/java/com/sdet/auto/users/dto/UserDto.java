@@ -9,6 +9,18 @@ public class UserDto {
     private String email;
     private String role;
 
+    public UserDto() {
+    }
+
+    public UserDto(Long id, String user_name, String first_name, String last_name, String email, String role) {
+        this.id = id;
+        this.user_name = user_name;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.role = role;
+    }
+
     public Long getId() {
         return id;
     }
