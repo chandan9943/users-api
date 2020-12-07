@@ -89,4 +89,47 @@ public class UserIntegrationTests {
 //        assertEquals(td_Message, node.get("message").asText());
         assertEquals(td_path, node.get("path").asText());
     }
+
+    @Test
+    public void user_tc0004_getByUserId() {
+        String td_UserId = "101";
+        String td_UserName = "darth.vader";
+        String td_FirstName = "darth";
+        String td_LastName = "vader";
+        String td_Email = "darth.vader@gmail.com";
+        String td_Role = "villain";
+
+        ResponseEntity<UserDto> response = restTemplate.getForEntity(path + "/" + td_UserId, UserDto.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        UserDto userResponse = response.getBody();
+
+        assertEquals(td_UserId, userResponse.getId().toString());
+        assertEquals(td_UserName, userResponse.getUser_name());
+        assertEquals(td_FirstName, userResponse.getFirst_name());
+        assertEquals(td_LastName, userResponse.getLast_name());
+        assertEquals(td_Email, userResponse.getEmail());
+        assertEquals(td_Role, userResponse.getRole());
+    }
+
+    @Test
+    public void user_tc0005_getByUserId_exception() throws JsonProcessingException {
+        String td_UserId = "1001";
+        String td_Error = "Not Found";
+//        String td_Message = "User not found in User Repository";
+        String td_path = "/users/v1/" + td_UserId;
+        // since response will not be a user object, casting the response as a String so we can map to an object
+        ResponseEntity<String> response = restTemplate.getForEntity(path + "/" + td_UserId, String.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_Error, node.get("error").asText());
+//        assertEquals(td_Message, node.get("message").asText());
+        assertEquals(td_path, node.get("path").asText());
+    }
 }

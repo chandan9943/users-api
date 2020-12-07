@@ -99,4 +99,29 @@ public class UserControllerTests {
                 .andExpect(jsonPath("$.email").value(td_email))
                 .andExpect(jsonPath("$.role").value(td_role));
     }
+
+    @Test
+    public void user_controller_tc0003_getUserById() throws Exception {
+        Long td_id = 111L;
+        String td_userName = "td_userName1";
+        String td_firstName = "td_firstName1";
+        String td_lastName = "td_lastName1";
+        String td_email = "td_email1";
+        String td_role = "td_role1";
+        String td_ssn = "td_ssn1";
+
+        UserDto user = new UserDto(td_id, td_userName, td_firstName, td_lastName, td_email, td_role);
+
+        given(userService.getUserById(any(Long.class))).willReturn(user);
+
+        mockMvc.perform(get("/users/v1/111")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(td_id))
+                .andExpect(jsonPath("$.user_name").value(td_userName))
+                .andExpect(jsonPath("$.first_name").value(td_firstName))
+                .andExpect(jsonPath("$.last_name").value(td_lastName))
+                .andExpect(jsonPath("$.email").value(td_email))
+                .andExpect(jsonPath("$.role").value(td_role));
+    }
 }

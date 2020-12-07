@@ -106,3 +106,5 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
         - add @GetMapping("/{id}) the id is a param and comes from the url input
         
     - unit test getUserById
+    
+        - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, UserRepositoryTests
