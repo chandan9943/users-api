@@ -2,6 +2,7 @@ package com.sdet.auto.users.service;
 
 import com.sdet.auto.users.dto.UserDto;
 import com.sdet.auto.users.exceptions.UserExistsException;
+import com.sdet.auto.users.exceptions.UserNotFoundException;
 import com.sdet.auto.users.model.User;
 import com.sdet.auto.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -36,6 +38,25 @@ public class UserServiceImpl implements UserService {
         }
 
         return userDtoCollection;
+    }
+
+    @Override
+    public UserDto getUserById(Long id) throws UserNotFoundException {
+        Optional<User> user = userRepository.findById(id); // Optional<User>, return will be given id info or empty()
+
+        if (!user.isPresent()) {
+            throw new UserNotFoundException("User not found in User Repository");
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.setId(user.get().getId());
+        userDto.setUser_name(user.get().getUsername());
+        userDto.setFirst_name(user.get().getFirstname());
+        userDto.setLast_name(user.get().getLastname());
+        userDto.setEmail(user.get().getEmail());
+        userDto.setRole(user.get().getRole());
+
+        return userDto;
     }
 
     @Override
