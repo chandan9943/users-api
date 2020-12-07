@@ -82,3 +82,6 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
          - add @PostMapping, add @RequestBody to param of method.  This is where json body will be passed in.
 
      - unit test createUser 
+        
+        - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests. (UserRepositoryTests - 
+            not necessary, create / save function already used in test setUp)

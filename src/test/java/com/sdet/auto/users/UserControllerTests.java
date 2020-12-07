@@ -1,5 +1,6 @@
 package com.sdet.auto.users;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sdet.auto.users.controller.UserController;
 import com.sdet.auto.users.dto.UserDto;
 import com.sdet.auto.users.service.UserService;
@@ -13,11 +14,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,7 +41,6 @@ public class UserControllerTests {
 
     private final String path = "/users/v1";
 
-
     @Test
     public void user_controller_tc0001_getAllUsers() throws Exception {
         Long td_id = 111L;
@@ -48,7 +53,7 @@ public class UserControllerTests {
         UserDto userDto = new UserDto(td_id, td_userName, td_firstName, td_lastName, td_email, td_role);
 
         List<UserDto> allUsers = Arrays.asList(userDto);
-
+        // when method is called, return mock
         given(userService.getAllUsers()).willReturn(allUsers);
 
         mockMvc.perform(get(path)
@@ -61,5 +66,37 @@ public class UserControllerTests {
                 .andExpect(jsonPath("$[0].last_name").value(td_lastName))
                 .andExpect(jsonPath("$[0].email").value(td_email))
                 .andExpect(jsonPath("$[0].role").value(td_role));
+    }
+
+    @Test
+    public void user_controller_tc0002_createUser() throws Exception {
+        Long td_id = 222L;
+        String td_userName = "td_userName2";
+        String td_firstName = "td_firstName2";
+        String td_lastName = "td_lastName2";
+        String td_email = "td_email2";
+        String td_role = "td_role2";
+
+        UserDto userDto = new UserDto(td_id, td_userName, td_firstName, td_lastName, td_email, td_role);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String userAsString = objectMapper.writeValueAsString(userDto);
+
+        // when method is called, return mock
+        when(userService.createUser(any(UserDto.class))).thenReturn(userDto);
+
+        mockMvc.perform( MockMvcRequestBuilders
+                .post(path)
+                .content(userAsString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.user_name").value(td_userName))
+                .andExpect(jsonPath("$.first_name").value(td_firstName))
+                .andExpect(jsonPath("$.last_name").value(td_lastName))
+                .andExpect(jsonPath("$.email").value(td_email))
+                .andExpect(jsonPath("$.role").value(td_role));
     }
 }

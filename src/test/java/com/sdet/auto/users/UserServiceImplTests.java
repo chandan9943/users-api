@@ -1,6 +1,7 @@
 package com.sdet.auto.users;
 
 import com.sdet.auto.users.dto.UserDto;
+import com.sdet.auto.users.exceptions.UserExistsException;
 import com.sdet.auto.users.model.User;
 import com.sdet.auto.users.repository.UserRepository;
 import com.sdet.auto.users.service.UserService;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -46,7 +48,7 @@ public class UserServiceImplTests {
     private UserRepository userRepository;
 
     @Before
-    public void setUp() {
+    public void setUp() throws UserExistsException {
 
         Long td_id1 = 111L;
         String td_userName1 = "td_userName1";
@@ -77,6 +79,7 @@ public class UserServiceImplTests {
 
         // list out mocks scenarios below.
         Mockito.when(userRepository.findAll()).thenReturn(td_users);
+        Mockito.when(userRepository.save(any(User.class))).thenReturn(user3);
     }
 
     @Test
@@ -99,5 +102,42 @@ public class UserServiceImplTests {
         assertEquals(users.get(user1).getLast_name(), td_lastName1);
         assertEquals(users.get(user1).getEmail(), td_email1);
         assertEquals(users.get(user1).getRole(), td_role1);
+    }
+
+    @Test
+    public void user_service_tc0002_createUser() throws UserExistsException {
+        Long td_id3 = 333L;
+        String td_userName3 = "td_userName3";
+        String td_firstName3 = "td_firstName3";
+        String td_lastName3 = "td_lastName3";
+        String td_email3 = "td_email3";
+        String td_role3 = "td_role3";
+
+        UserDto inputUser = new UserDto(td_id3, td_userName3, td_firstName3, td_lastName3, td_email3, td_role3);
+
+        UserDto returnUser = userService.createUser(inputUser);
+
+        assertEquals(returnUser.getId(), td_id3);
+        assertEquals(returnUser.getUser_name(), td_userName3);
+        assertEquals(returnUser.getFirst_name(), td_firstName3);
+        assertEquals(returnUser.getLast_name(), td_lastName3);
+        assertEquals(returnUser.getEmail(), td_email3);
+        assertEquals(returnUser.getRole(), td_role3);
+    }
+
+    @Test
+    public void user_service_tc0003_createUser_Exception() {
+        String td_userName = "td_userName";
+        String td_error_message = "User already exists in User Repository";
+
+        UserDto userDto = new UserDto(null, td_userName, "", "", "", "");
+
+        Mockito.when(userRepository.findByUsername(any(String.class))).thenReturn(new User());
+
+        try {
+            userService.createUser(userDto);
+        } catch (UserExistsException ex) {
+            assertEquals(td_error_message, ex.getMessage());
+        }
     }
 }
