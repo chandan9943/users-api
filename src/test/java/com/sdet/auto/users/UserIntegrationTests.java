@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sdet.auto.users.dto.UserDto;
+import com.sdet.auto.users.repository.UserRepository;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +28,9 @@ public class UserIntegrationTests {
 
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    UserRepository userRepository;
 
     private final String path = "/users/v1";
 
@@ -244,5 +248,23 @@ public class UserIntegrationTests {
         assertEquals(td_Error, node.get("error").asText());
 //        assertEquals(td_Message, node.get("message").asText());
         assertEquals(td_path, node.get("path").asText());
+    }
+
+    @Test
+    public void user_tc0010_deleteUserById() {
+        String td_UserName = "captain.marvel";
+        String td_FirstName = "captain";
+        String td_LastName = "marvel";
+        String td_Email = "captain.marvel@gmail.com";
+        String td_Role = "admin";
+        // create a new record
+        UserDto entity = new UserDto(null, td_UserName, td_FirstName, td_LastName, td_Email, td_Role);
+        ResponseEntity<UserDto> response = restTemplate.postForEntity(path, entity, UserDto.class);
+        // delete record
+        ResponseEntity<String> deleteResponse = restTemplate.exchange(path + "/" + response.getBody().getId(),
+                HttpMethod.DELETE, new HttpEntity<String>(null, new HttpHeaders()), String.class);
+        // verify response code and record does not exist
+        assertEquals(HttpStatus.NO_CONTENT, deleteResponse.getStatusCode());
+        assertFalse(userRepository.existsById(response.getBody().getId()));
     }
 }

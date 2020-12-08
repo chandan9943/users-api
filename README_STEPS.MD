@@ -150,3 +150,5 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
         - add @PathVariable for id input
         
     - unit test deleteUserById
+    
+        - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, UserRepositoryTests

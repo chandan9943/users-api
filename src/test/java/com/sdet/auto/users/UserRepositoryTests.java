@@ -113,4 +113,13 @@ public class UserRepositoryTests {
         assertEquals("email4", user.getEmail());
         assertEquals("role4", user.getRole());
     }
+
+    @Test
+    public void user_repository_tc0004_testDelete() {
+        userRepository.deleteAll();
+
+        Optional<User> user = userRepository.findById(1L);
+
+        assertEquals(user.orElse(null), null);
+    }
 }
