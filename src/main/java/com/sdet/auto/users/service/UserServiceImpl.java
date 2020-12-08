@@ -136,4 +136,17 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(saveUser);
     }
+
+    @Override
+    public void deleteUserById(Long id) {
+        // do not need logic to check if user already exist. typically with a delete, we try and think of it less
+        // like being sure an operation is performed and think of it more like ensuring the intended state is achieved
+
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception ex) {
+            // do nothing.  Since the desired outcome is to delete a user, even if it does not exist we will
+            // pass thru and not throw an error and let the controller return a 204
+        }
+    }
 }
