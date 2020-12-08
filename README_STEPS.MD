@@ -123,3 +123,5 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
         - add @GetMapping("/byusername/{username}") - note path has addition, since searching by string vs Long
 
     - unit test getUserByUsername
+    
+        - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, UserRepositoryTests

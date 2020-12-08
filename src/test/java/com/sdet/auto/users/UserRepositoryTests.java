@@ -87,4 +87,30 @@ public class UserRepositoryTests {
         assertEquals("email3", user.get().getEmail());
         assertEquals("role3", user.get().getRole());
     }
+
+    @Test
+    public void user_repository_tc0003_getByUsername() {
+        // creating a record so we can test the findByUsername function
+        User user4 = new User(null, "username4", "firstname4", "lastname4",
+                "email4", "role4");
+
+        this.userRepository.save(user4);
+
+        List<User> saved_users = userRepository.findAll();
+
+        int firstRecord = 0;
+
+        Long userId = saved_users.get(firstRecord).getId();
+
+        String userName = saved_users.get(firstRecord).getUsername();
+
+        User user = userRepository.findByUsername(userName);
+
+        assertEquals(user.getId(), userId);
+        assertEquals("username4", user.getUsername());
+        assertEquals("firstname4", user.getFirstname());
+        assertEquals("lastname4", user.getLastname());
+        assertEquals("email4", user.getEmail());
+        assertEquals("role4", user.getRole());
+    }
 }
