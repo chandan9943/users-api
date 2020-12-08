@@ -84,7 +84,7 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
      - unit test createUser 
         
         - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests. (UserRepositoryTests - 
-            not necessary, create / save function already used in test setUp)
+            not necessary, create / save function already used in test)
            
 #### 04-get-by-user-id 
 1) Implement getUserById @GetMapping
@@ -136,3 +136,6 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
         - add @PathVariable for id input, add @RequestBody for json body input
 
     - unit test updateByUserId
+    
+        - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, (UserRepositoryTests - 
+            not necessary, create / save function already used in test)

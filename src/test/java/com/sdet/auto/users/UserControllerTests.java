@@ -26,7 +26,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
@@ -147,5 +147,21 @@ public class UserControllerTests {
                 .andExpect(jsonPath("$.last_name").value(td_lastName))
                 .andExpect(jsonPath("$.email").value(td_email))
                 .andExpect(jsonPath("$.role").value(td_role));
+    }
+
+    @Test
+    public void user_controller_tc0005_updateUserById() throws Exception {
+        Long td_id = 222L;
+        UserDto userDto = new UserDto(td_id, "", "", "", "", "");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String userAsString = objectMapper.writeValueAsString(userDto);
+
+        mockMvc.perform(put("/users/v1/" + td_id)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(userAsString))
+                .andExpect(status().isNoContent())
+                .andReturn();
     }
 }

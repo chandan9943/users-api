@@ -174,4 +174,75 @@ public class UserIntegrationTests {
         assertEquals(td_pathDetails, node.get("path").asText());
         assertEquals(td_error, node.get("error").asText());
     }
+
+    @Test
+    public void user_tc0008_updateUserById() {
+        String td_Id = "101";
+        String td_UserName = "darth.vader_updated";
+        String td_FirstName = "darth_updated";
+        String td_LastName = "vader_updated";
+        String td_Email = "darth.vader_updated@gmail.com";
+        String td_Role = "admin_updated";
+
+        // making a get to get a user record
+        ResponseEntity<UserDto> initResponse = restTemplate.getForEntity(path + "/" + td_Id, UserDto.class);
+
+        UserDto initUser = initResponse.getBody();
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> entity = new HttpEntity<>(initUser, headers);
+        // edit user entity with updated test data values
+        entity.getBody().setUser_name(td_UserName);
+        entity.getBody().setFirst_name(td_FirstName);
+        entity.getBody().setLast_name(td_LastName);
+        entity.getBody().setEmail(td_Email);
+        entity.getBody().setRole(td_Role);
+
+        // make a put call to edit the record using an api put request with updated entity
+        ResponseEntity<String> response = restTemplate.exchange(path + "/" + entity.getBody().getId(), HttpMethod.PUT,
+                entity, String.class);
+
+        // assert the response from the api
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
+        // making a getByUserId to retrieve the user record
+        ResponseEntity<UserDto> getResponse = restTemplate.getForEntity(path + "/" + td_Id, UserDto.class);
+
+        // assert the response body from getByUserId request
+        UserDto updatedUser = getResponse.getBody();
+        assertEquals(td_Id, updatedUser.getId().toString());
+        assertEquals(td_UserName, updatedUser.getUser_name());
+        assertEquals(td_FirstName, updatedUser.getFirst_name());
+        assertEquals(td_LastName, updatedUser.getLast_name());
+        assertEquals(td_Email, updatedUser.getEmail());
+        assertEquals(td_Role, updatedUser.getRole());
+    }
+
+    @Test
+    public void user_tc0009_updateUserById_exception() throws JsonProcessingException {
+        String td_UserId = "1001";
+        String td_Error = "Bad Request";
+//        String td_Message = "User not found in User Repository, please provide correct user id";
+        String td_path = "/users/v1/" + td_UserId;
+        // creating user entity for put
+        UserDto entity = new UserDto(null, "", "", "", "", "");
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> putEntity = new HttpEntity<>(entity, headers);
+
+        // make a put call to edit the record using an api put request
+        ResponseEntity<String> response = restTemplate.exchange(path + "/" + td_UserId, HttpMethod.PUT,
+                putEntity, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_Error, node.get("error").asText());
+//        assertEquals(td_Message, node.get("message").asText());
+        assertEquals(td_path, node.get("path").asText());
+    }
 }
