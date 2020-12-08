@@ -102,4 +102,38 @@ public class UserServiceImpl implements UserService {
         // return user dto
         return userDto;
     }
+
+    @Override
+    public void updateUserById(Long id, UserDto userDto) throws UserNotFoundException {
+        // logic to check repository if user is present
+        Optional<User> user = userRepository.findById(id); // Optional<User>, return will be given id info or empty()
+
+        if (!user.isPresent()) {
+            throw new UserNotFoundException("User not found in User Repository");
+        }
+        // setting new User object from user returned from repository
+        User saveUser = user.get();
+        // check if userDto passed in has any changes for the following fields, else keep what they had before.
+        if(userDto.getUser_name() != null && !userDto.getUser_name().isEmpty()) {
+            saveUser.setUsername(userDto.getUser_name());
+        }
+
+        if(userDto.getFirst_name() != null && !userDto.getFirst_name().isEmpty()) {
+            saveUser.setFirstname(userDto.getFirst_name());
+        }
+
+        if(userDto.getLast_name() != null && !userDto.getLast_name().isEmpty()) {
+            saveUser.setLastname(userDto.getLast_name());
+        }
+
+        if(userDto.getEmail() != null && !userDto.getEmail().isEmpty()) {
+            saveUser.setEmail(userDto.getEmail());
+        }
+
+        if(userDto.getRole() != null && !userDto.getRole().isEmpty()) {
+            saveUser.setRole(userDto.getRole());
+        }
+
+        userRepository.save(saveUser);
+    }
 }

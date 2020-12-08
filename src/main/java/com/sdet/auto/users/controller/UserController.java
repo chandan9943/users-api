@@ -56,4 +56,14 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateUserById(@PathVariable("id") Long id, @RequestBody UserDto user) {
+        try {
+            userService.updateUserById(id, user);
+        } catch (UserNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
 }
