@@ -36,6 +36,15 @@ public class UserController {
         }
     }
 
+    @GetMapping("/byusername/{username}")
+    public UserDto getUserByUsername(@PathVariable("username") String username) {
+        try {
+            return userService.getUserByUsername(username);
+        } catch (UserNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
+    }
+
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto, UriComponentsBuilder builder) {
         try {
