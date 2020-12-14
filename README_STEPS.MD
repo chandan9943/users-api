@@ -249,7 +249,7 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
 
     - create unit test check if patch throws exception
     
-        - create user_tc0013_updateUserById_exception_invalid_method
+        - create user_tc0013_updateUserById_exception_invalid_method & user_tc0014_updateUserById_exception_patch
     
         - make a post call and set patch in the url path due to bug with restTemplate and patch function
 
@@ -262,3 +262,7 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
         - add @Validated annotation to UserController
         
     - create handleConstraintViolationExceptionHandler and add with a custom message and error code Bad Request
+
+    - create unit test check if patch throws exception
+        
+        - add constraint tests for - getUserById, updateUserById, deleteUserById

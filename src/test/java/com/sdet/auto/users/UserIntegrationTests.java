@@ -379,4 +379,68 @@ public class UserIntegrationTests {
         assertEquals(td_ErrorDetails, node.get("error_details").asText());
         assertEquals(td_Message, node.get("message").asText());
     }
+
+    @Test
+    public void user_tc0015_getByUserId_exception_constraint() throws JsonProcessingException {
+        String td_UserId = "0";
+        String td_ErrorDetails = "getUserById.id: must be greater than or equal to 1";
+        String td_Message = "from handleConstraintViolationException in method";
+
+        ResponseEntity<String> response = restTemplate.getForEntity(path + "/" + td_UserId, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_ErrorDetails, node.get("error_details").asText());
+        assertEquals(td_Message, node.get("message").asText());
+    }
+
+    @Test
+    public void user_tc0016_updateUserById_exception_constraint() throws JsonProcessingException {
+        String td_UserId = "0";
+        String td_ErrorDetails = "updateUserById.id: must be greater than or equal to 1";
+        String td_Message = "from handleConstraintViolationException in method";
+
+        // creating user entity for put
+        UserDto entity = new UserDto();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> putEntity = new HttpEntity<>(entity, headers);
+
+        // make a post call and set patch in the url path due to bug with restTemplate and patch function
+        ResponseEntity<String> response = restTemplate.exchange(path + "/" + td_UserId, HttpMethod.PUT,
+                putEntity, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_ErrorDetails, node.get("error_details").asText());
+        assertEquals(td_Message, node.get("message").asText());
+    }
+    @Test
+    public void user_tc0017_deleteUserById_exception_constraint() throws JsonProcessingException {
+        String td_UserId = "0";
+        String td_ErrorDetails = "deleteUserById.id: must be greater than or equal to 1";
+        String td_Message = "from handleConstraintViolationException in method";
+        // delete record
+        ResponseEntity<String> response = restTemplate.exchange(path + "/" + td_UserId,
+                HttpMethod.DELETE, new HttpEntity<String>(null, new HttpHeaders()), String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_ErrorDetails, node.get("error_details").asText());
+        assertEquals(td_Message, node.get("message").asText());
+    }
 }
