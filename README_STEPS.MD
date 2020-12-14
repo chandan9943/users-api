@@ -271,10 +271,10 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
 
 - swagger is used to document an api, and helps users understand how to implement their client apps
 
-1) add springfox dependencies to build.gradle
+1) add springfox dependencies to build.gradle - due to bug with 3.0.0 with swagger-ui using older version
    ```
-	implementation 'io.springfox:springfox-swagger2:3.0.0'
-	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	implementation 'io.springfox:springfox-swagger2:2.9.2'
+	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
    ```
     
 2) create SwaggerConfig file
