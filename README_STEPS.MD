@@ -152,3 +152,53 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - unit test deleteUserById
     
         - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, UserRepositoryTests
+        
+#### 08-validations-global-exception-handling 
+
+- commonly used validation annotations: @NotNull, @Size, @Min, @Max, @Email, @NotBlank, @NotEmpty
+
+- global exception handling
+
+    - @ControllerAdvice - write global code that can be applied to wide range of controllers
+
+        - by default @ControllerAdvice annotation will be applicable to all classes that use @Controller
+
+    - @ExceptionHandler - annotation for handling exceptions in specific handler classes or handler methods
+
+        - if used with controller directly need to define per controller basis.  If used with @ControllerAdvice it will 
+        only be used in Global Exception Handler class, but applicable to all controllers due to @ControllerAdvice
+        
+- use case combination
+    
+    - @ControllerAdvice class
+    
+        - MethodArgumentNotValidException
+        
+        - HttpRequestMethodNotSupportedException
+    
+    - @ControllerAdvice & @ExceptionHandler
+    
+        - for pre-defined exceptions like ConstraintViolations
+
+1) implement Bean Validation
+
+    - update gradle dependency to use `spring-boot-starter-validation`
+
+    - Model / Entity Layer
+    
+        - implement validation for UserDto class
+    
+            - @NotEmpty(message="<field_name> is a required field.  Please provide a <field_name>")
+    
+            - @Size(min=2, message="<field_name> should contain at least 2 characters")
+    
+    - Controller
+    
+        - go to createUser method and add @Valid to params - this will validate the request body in the controller
+        before it gets to the serviceLayer
+    
+        - user Postman to try the ceate a user
+        
+            - if the validations do not pass, it will return a 400 and json error message 
+            
+            - if you check the run console you will see a MethodArgumentNotValidException thrown
