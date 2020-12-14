@@ -337,7 +337,7 @@ public class UserIntegrationTests {
     }
 
     @Test
-    public void user_tc0013_updateUserById_exception_invalid_method() throws JsonProcessingException {
+    public void user_tc0013_updateUserById_exception_invalid_method() {
         String td_error = "Invalid HTTP method: PATCH";
         // creating user entity for put
         UserDto entity = new UserDto();
@@ -352,5 +352,31 @@ public class UserIntegrationTests {
         } catch (ResourceAccessException ex) {
             assertThat(ex.getMessage(), containsString(td_error));
         }
+    }
+
+    @Test
+    public void user_tc0014_updateUserById_exception_patch() throws JsonProcessingException {
+        String td_UserId = "102";
+        String td_ErrorDetails = "Request method 'POST' not supported";
+        String td_Message = "from handleHttpRequestMethodNotSupported in method";
+
+        // creating user entity for put
+        UserDto entity = new UserDto();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> putEntity = new HttpEntity<>(entity, headers);
+
+        // make a post call and set patch in the url path due to bug with restTemplate and patch function
+        ResponseEntity<String> response = restTemplate.postForEntity(path + "/" + td_UserId + "?_method=patch",
+                entity, String.class);
+
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_ErrorDetails, node.get("error_details").asText());
+        assertEquals(td_Message, node.get("message").asText());
     }
 }
