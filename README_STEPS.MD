@@ -253,3 +253,12 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     
         - make a post call and set patch in the url path due to bug with restTemplate and patch function
 
+4) implement path variable validation & implement exception handler for ConstraintViolationException
+
+    - go to Controller
+
+        - getUserById, updateUserById, deleteUserById - add @Min(1) for path variable
+
+        - add @Validated annotation to UserController
+        
+    - create handleConstraintViolationExceptionHandler and add with a custom message and error code Bad Request

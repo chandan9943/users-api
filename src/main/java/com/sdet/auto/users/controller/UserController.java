@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("users/v1")
 public class UserController {
@@ -61,7 +62,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateUserById(@PathVariable("id") Long id, @RequestBody UserDto user) {
+    public void updateUserById(@PathVariable("id") @Min(1) Long id, @RequestBody UserDto user) {
         try {
             userService.updateUserById(id, user);
         } catch (UserNotFoundException ex) {
@@ -71,7 +72,7 @@ public class UserController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(@PathVariable("id") Long id) {
+    public void deleteUserById(@PathVariable("id") @Min(1) Long id) {
         userService.deleteUserById(id);
     }
 }
