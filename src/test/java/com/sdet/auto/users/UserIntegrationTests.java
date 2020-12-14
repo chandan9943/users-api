@@ -77,7 +77,7 @@ public class UserIntegrationTests {
 //        String td_Message = "User already exists in User Repository";
         String td_path = "/users/v1";
 
-        UserDto entity = new UserDto(null, td_UserName, "", "", "", "");
+        UserDto entity = new UserDto(null, td_UserName, "aa", "aa", "aa", "aa");
         ResponseEntity<String> response = restTemplate.postForEntity(path, entity, String.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
