@@ -247,3 +247,9 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     
         - add @Override then add custom message and error code
 
+    - create unit test check if patch throws exception
+    
+        - create user_tc0013_updateUserById_exception_invalid_method
+    
+        - make a post call and set patch in the url path due to bug with restTemplate and patch function
+

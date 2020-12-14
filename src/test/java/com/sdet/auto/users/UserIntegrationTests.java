@@ -15,6 +15,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -332,6 +333,24 @@ public class UserIntegrationTests {
         // loop and check actual error contains each of the expected errors
         for (String error: td_errorDetails) {
             assertThat(node.get("error_details").asText(), containsString(error));
+        }
+    }
+
+    @Test
+    public void user_tc0013_updateUserById_exception_invalid_method() throws JsonProcessingException {
+        String td_error = "Invalid HTTP method: PATCH";
+        // creating user entity for put
+        UserDto entity = new UserDto();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> putEntity = new HttpEntity<>(entity, headers);
+
+        try {
+            restTemplate.exchange(path + "/" + 101, HttpMethod.PATCH,
+                    putEntity, String.class);
+            // if above does not throw and exception, something wis wrong, fail the test
+            assertTrue("user_tc0013_updateUserById_exception_method_not_supported - FAILED:", false);
+        } catch (ResourceAccessException ex) {
+            assertThat(ex.getMessage(), containsString(td_error));
         }
     }
 }
