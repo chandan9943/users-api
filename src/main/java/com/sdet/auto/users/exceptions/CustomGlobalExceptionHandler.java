@@ -64,8 +64,8 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     public final ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex,
                                                                            WebRequest request) {
 
-        CustomErrorDetails customErrorDetails = new CustomErrorDetails(new Date(), ex.getMessage(),
-                request.getDescription(false));
+        CustomErrorDetails customErrorDetails = new CustomErrorDetails(new Date(),
+                "from handleConstraintViolationException in method", ex.getMessage());
 
         return new ResponseEntity<>(customErrorDetails, HttpStatus.BAD_REQUEST);
     }
