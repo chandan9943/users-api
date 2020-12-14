@@ -266,3 +266,23 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - create unit test check if patch throws exception
         
         - add constraint tests for - getUserById, updateUserById, deleteUserById
+
+#### 09-swagger
+
+- swagger is used to document an api, and helps users understand how to implement their client apps
+
+1) add springfox dependencies to build.gradle
+   ```
+	implementation 'io.springfox:springfox-swagger2:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+   ```
+    
+2) create SwaggerConfig file
+    - annotate with @Configuration
+    - annotate with @EnableSwagger2
+    - create a Docket bean and annotate with @Bean
+    - swagger metadata URL
+        - http://localhost:8080/v2/api-docs
+        - verify swagger yml online at https://editor.swagger.io/
+    - swagger ui url
+        - http://localhost:8080/swagger-ui.html
