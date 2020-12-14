@@ -233,3 +233,6 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     
         - since bean validation of fields requires at lest 2 characters, must update test inputs
         
+    - unit test createUser
+    
+        - UserIntegrationTests

@@ -16,8 +16,10 @@ import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -266,5 +268,70 @@ public class UserIntegrationTests {
         // verify response code and record does not exist
         assertEquals(HttpStatus.NO_CONTENT, deleteResponse.getStatusCode());
         assertFalse(userRepository.existsById(response.getBody().getId()));
+    }
+
+    @Test
+    public void user_tc0011_createUser_global_exception_required() throws JsonProcessingException {
+        String td_message = "from handleMethodArgumentNotValid method";
+        // array of expected errors
+        List<String> td_errorDetails = new ArrayList<>();
+        td_errorDetails.add("role is a required field.  Please provide a role");
+        td_errorDetails.add("user_name should contain at least 2 characters");
+        td_errorDetails.add("last_name is a required field.  Please provide a last_name");
+        td_errorDetails.add("first_name should contain at least 2 characters");
+        td_errorDetails.add("email should contain at least 2 characters");
+        td_errorDetails.add("user_name is a required field.  Please provide a user_name");
+        td_errorDetails.add("email is a required field.  Please provide a email");
+        td_errorDetails.add("last_name should contain at least 2 characters");
+        td_errorDetails.add("role should contain at least 2 characters");
+        td_errorDetails.add("first_name is a required field.  Please provide a first_name");
+
+        UserDto entity = new UserDto(null, "", "", "", "", "");
+        ResponseEntity<String> response = restTemplate.postForEntity(path, entity, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+
+        // assert expected vs actual
+        assertEquals(td_message, node.get("message").asText());
+        // loop and check actual error contains each of the expected errors
+        for (String error: td_errorDetails) {
+            assertThat(node.get("error_details").asText(), containsString(error));
+        }
+    }
+
+    @Test
+    public void user_tc0012_createUser_global_exception_characters() throws JsonProcessingException {
+        String td_message = "from handleMethodArgumentNotValid method";
+        // array of expected errors
+        List<String> td_errorDetails = new ArrayList<>();
+        td_errorDetails.add("user_name should contain at least 2 characters");
+        td_errorDetails.add("first_name should contain at least 2 characters");
+        td_errorDetails.add("email should contain at least 2 characters");
+        td_errorDetails.add("last_name should contain at least 2 characters");
+        td_errorDetails.add("role should contain at least 2 characters");
+
+        UserDto entity = new UserDto(null, "a", "a", "a", "a", "a");
+        ResponseEntity<String> response = restTemplate.postForEntity(path, entity, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+
+        // assert expected vs actual
+        assertEquals(td_message, node.get("message").asText());
+        // loop and check actual error contains each of the expected errors
+        for (String error: td_errorDetails) {
+            assertThat(node.get("error_details").asText(), containsString(error));
+        }
     }
 }
