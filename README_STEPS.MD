@@ -236,3 +236,14 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - unit test createUser
     
         - UserIntegrationTests
+
+3) implement exception handler for HttpRequestMethodNotSupportedException
+    
+    - go to CustomGlobalExceptionHandler
+    
+    - hover and go to definition of ResponseEntityExceptionHandler find handleHttpRequestMethodNotSupported
+    
+    - copy and paste handleHttpRequestMethodNotSupported function, and refactor with custom message
+    
+        - add @Override then add custom message and error code
+
