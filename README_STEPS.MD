@@ -340,3 +340,21 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - go to UserDto Class add annotation at class level
 
     - add field level annotations: notes, required, position, position (will default if position not set)
+    
+7) add swagger Core annotation to Controller Class
+
+    - controller
+
+        -@Api(tag = "Use Management RESTful Services", value = "UserController")
+
+    - method level
+
+        - @ApiOperation(value = "create a new user")
+
+    - parameter level
+
+        - @ApiParam("User information for a new user created)
+
+    - produces / responses within the swagger yml
+
+        - add produces within a mapping.  Example: @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

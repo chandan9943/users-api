@@ -12,7 +12,7 @@ public class UserDto {
     @ApiModelProperty(notes = "Auto generated unique id", required = true, position = 1)
     private Long id;
 
-    @ApiModelProperty(notes = "user_name should contain more than 1 character", example = "sdet.auto", required = true, position = 2)
+    @ApiModelProperty(notes = "user_name should contain more than 1 character", example = "user.name", required = true, position = 2)
     @NotEmpty(message="user_name is a required field.  Please provide a user_name")
     @Size(min=2, max=50, message="user_name should contain at least 2 characters")
     private String user_name;
