@@ -427,7 +427,7 @@ histograms, and sla boundary counts
     
         - http://localhost:8080/actuator/metrics/http.server.requests
     
-2) integrate with JMX nd view metrics in JConsole using JMX.  Add JMX dependency
+2) integrate with JMX and view metrics in JConsole using JMX.  Add JMX dependency
     
     ```
     implementation 'io.micrometer:micrometer-registry-jmx'
@@ -444,3 +444,11 @@ histograms, and sla boundary counts
         - in the jconsole window select your api solution, then click Connect
     
         - to see metrics nav to: MBeans > Metrics > you will see all the different metrics
+        
+#### 12-docker
+
+    - add Dockerfile to project
+    
+    - create a docker image: `docker build -t user-api .`
+    
+    - run docker container: `docker run -it -p 8080:8080 user-api`
