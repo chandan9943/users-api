@@ -400,3 +400,47 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
    
    - to see the build information, build and start your app and navigate to: `http://localhost:8080/actuator/info`
 
+#### 11-micrometer
+
+- metrics collection built in spring boot actuator 2
+
+- dimensional-first metrics collection that allow us to time, count, and gauge with a vendor neutral api
+
+- implemented through classpath and configuration
+
+- micrometer timer is capable of producing time series throughput, total time, maximum latency, pre-computed percentiles
+histograms, and sla boundary counts
+
+- enables us to choose one or more monitoring systems
+
+- https://micrometer.io/docs
+
+1) add micrometer dependency for metrics and view metrics
+
+    ```
+    implementation 'io.micrometer:micrometer-core'
+    ```
+
+    - simple (in memory backend - fall back option) - by default is enabled
+    
+        - to disable: `management.metrics.export.simple.enabled=false`
+    
+        - http://localhost:8080/actuator/metrics/http.server.requests
+    
+2) integrate with JMX nd view metrics in JConsole using JMX.  Add JMX dependency
+    
+    ```
+    implementation 'io.micrometer:micrometer-registry-jmx'
+    ```
+    
+    - add `management.metrics.export.jmx.enabled=true` to application.properties
+    
+    - to view JConsole
+    
+        - first start the application
+    
+        - then from a terminal type `jconsole`
+    
+        - in the jconsole window select your api solution, then click Connect
+    
+        - to see metrics nav to: MBeans > Metrics > you will see all the different metrics
