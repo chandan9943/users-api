@@ -66,4 +66,10 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUserById(@PathVariable("id") Long id) {
+        userService.deleteUserById(id);
+    }
 }

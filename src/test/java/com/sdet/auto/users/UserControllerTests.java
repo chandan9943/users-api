@@ -164,4 +164,13 @@ public class UserControllerTests {
                 .andExpect(status().isNoContent())
                 .andReturn();
     }
+
+    @Test
+    public void user_controller_tc0006_deleteUserById() throws Exception {
+        mockMvc.perform(delete("/users/v1/222")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(status().isNoContent())
+                .andReturn();
+    }
 }

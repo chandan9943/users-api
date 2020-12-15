@@ -17,4 +17,6 @@ public interface UserService {
     UserDto createUser(UserDto user) throws UserExistsException;
 
     void updateUserById(Long id, UserDto userDto) throws UserNotFoundException;
+
+    void deleteUserById(Long id);
 }

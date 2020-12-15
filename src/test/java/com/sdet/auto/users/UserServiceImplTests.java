@@ -229,4 +229,12 @@ public class UserServiceImplTests {
             assertEquals(td_error_message, ex.getMessage());
         }
     }
+
+    @Test
+    public void user_service_tc0010_deleteUser() {
+        Long td_userId = 111L;
+        userService.deleteUserById(td_userId);
+
+        Mockito.verify(userRepository, times(1)).deleteById(any(Long.class));
+    }
 }

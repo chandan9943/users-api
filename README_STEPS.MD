@@ -139,3 +139,16 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     
         - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, (UserRepositoryTests - 
             not necessary, create / save function already used in test)
+
+#### 07-delete-by-user-id            
+10) Implement deleteUserById @DeleteMapping
+
+    - go to UserService create method deleteUserById
+        
+    - go to Controller create method for deleteUserById
+    
+        - add @PathVariable for id input
+        
+    - unit test deleteUserById
+    
+        - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, UserRepositoryTests
