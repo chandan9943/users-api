@@ -85,3 +85,26 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
         
         - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests. (UserRepositoryTests - 
             not necessary, create / save function already used in test setUp)
+           
+#### 04-get-by-user-id 
+1) Implement getUserById @GetMapping
+
+    - go to UserService create method for getUserById
+    
+    - add getUserById to UserService and implement UserServiceImpl
+    
+    - create UserNotFoundException class
+    
+    - go to UserController create method for getUserById
+        
+        - add @PathVariable parameter which gets the id from the url
+        
+        - add @Min to check if user adds at least minimum of 1
+        
+            - add gradle dependency for `javax.validation:validation-api:2.0.1.Final`
+        
+        - add @GetMapping("/{id}) the id is a param and comes from the url input
+        
+    - unit test getUserById
+    
+        - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, UserRepositoryTests

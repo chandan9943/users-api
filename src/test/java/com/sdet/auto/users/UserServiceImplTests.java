@@ -2,6 +2,7 @@ package com.sdet.auto.users;
 
 import com.sdet.auto.users.dto.UserDto;
 import com.sdet.auto.users.exceptions.UserExistsException;
+import com.sdet.auto.users.exceptions.UserNotFoundException;
 import com.sdet.auto.users.model.User;
 import com.sdet.auto.users.repository.UserRepository;
 import com.sdet.auto.users.service.UserService;
@@ -80,6 +81,7 @@ public class UserServiceImplTests {
         // list out mocks scenarios below.
         Mockito.when(userRepository.findAll()).thenReturn(td_users);
         Mockito.when(userRepository.save(any(User.class))).thenReturn(user3);
+        Mockito.when(userRepository.findById(any(Long.class))).thenReturn(java.util.Optional.of(user1));
     }
 
     @Test
@@ -126,7 +128,7 @@ public class UserServiceImplTests {
     }
 
     @Test
-    public void user_service_tc0003_createUser_Exception() {
+    public void user_service_tc0003_createUser_exception() {
         String td_userName = "td_userName";
         String td_error_message = "User already exists in User Repository";
 
@@ -137,6 +139,37 @@ public class UserServiceImplTests {
         try {
             userService.createUser(userDto);
         } catch (UserExistsException ex) {
+            assertEquals(td_error_message, ex.getMessage());
+        }
+    }
+
+    @Test
+    public void user_service_tc0004_getUserById() throws UserNotFoundException {
+        Long td_id1 = 111L;
+        String td_userName1 = "td_userName1";
+        String td_firstName1 = "td_firstName1";
+        String td_lastName1 = "td_lastName1";
+        String td_email1 = "td_email1";
+        String td_role1 = "td_role1";
+
+        UserDto users = userService.getUserById(td_id1);
+
+        assertEquals(users.getId(), td_id1);
+        assertEquals(users.getUser_name(), td_userName1);
+        assertEquals(users.getFirst_name(), td_firstName1);
+        assertEquals(users.getLast_name(), td_lastName1);
+        assertEquals(users.getEmail(), td_email1);
+        assertEquals(users.getRole(), td_role1);
+    }
+
+    @Test
+    public void User_Service_tc0005_getUserById_exception() {
+        Long td_id1 = 999L;
+        String td_error_message = "User not found in User Repository";
+
+        try {
+            userService.getUserById(td_id1);
+        } catch (UserNotFoundException ex) {
             assertEquals(td_error_message, ex.getMessage());
         }
     }
