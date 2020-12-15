@@ -15,9 +15,12 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.ResourceAccessException;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -77,7 +80,7 @@ public class UserIntegrationTests {
 //        String td_Message = "User already exists in User Repository";
         String td_path = "/users/v1";
 
-        UserDto entity = new UserDto(null, td_UserName, "", "", "", "");
+        UserDto entity = new UserDto(null, td_UserName, "aa", "aa", "aa", "aa");
         ResponseEntity<String> response = restTemplate.postForEntity(path, entity, String.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -266,5 +269,178 @@ public class UserIntegrationTests {
         // verify response code and record does not exist
         assertEquals(HttpStatus.NO_CONTENT, deleteResponse.getStatusCode());
         assertFalse(userRepository.existsById(response.getBody().getId()));
+    }
+
+    @Test
+    public void user_tc0011_createUser_global_exception_required() throws JsonProcessingException {
+        String td_message = "from handleMethodArgumentNotValid method";
+        // array of expected errors
+        List<String> td_errorDetails = new ArrayList<>();
+        td_errorDetails.add("role is a required field.  Please provide a role");
+        td_errorDetails.add("user_name should contain at least 2 characters");
+        td_errorDetails.add("last_name is a required field.  Please provide a last_name");
+        td_errorDetails.add("first_name should contain at least 2 characters");
+        td_errorDetails.add("email should contain at least 2 characters");
+        td_errorDetails.add("user_name is a required field.  Please provide a user_name");
+        td_errorDetails.add("email is a required field.  Please provide a email");
+        td_errorDetails.add("last_name should contain at least 2 characters");
+        td_errorDetails.add("role should contain at least 2 characters");
+        td_errorDetails.add("first_name is a required field.  Please provide a first_name");
+
+        UserDto entity = new UserDto(null, "", "", "", "", "");
+        ResponseEntity<String> response = restTemplate.postForEntity(path, entity, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+
+        // assert expected vs actual
+        assertEquals(td_message, node.get("message").asText());
+        // loop and check actual error contains each of the expected errors
+        for (String error: td_errorDetails) {
+            assertThat(node.get("error_details").asText(), containsString(error));
+        }
+    }
+
+    @Test
+    public void user_tc0012_createUser_global_exception_characters() throws JsonProcessingException {
+        String td_message = "from handleMethodArgumentNotValid method";
+        // array of expected errors
+        List<String> td_errorDetails = new ArrayList<>();
+        td_errorDetails.add("user_name should contain at least 2 characters");
+        td_errorDetails.add("first_name should contain at least 2 characters");
+        td_errorDetails.add("email should contain at least 2 characters");
+        td_errorDetails.add("last_name should contain at least 2 characters");
+        td_errorDetails.add("role should contain at least 2 characters");
+
+        UserDto entity = new UserDto(null, "a", "a", "a", "a", "a");
+        ResponseEntity<String> response = restTemplate.postForEntity(path, entity, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+
+        // assert expected vs actual
+        assertEquals(td_message, node.get("message").asText());
+        // loop and check actual error contains each of the expected errors
+        for (String error: td_errorDetails) {
+            assertThat(node.get("error_details").asText(), containsString(error));
+        }
+    }
+
+    @Test
+    public void user_tc0013_updateUserById_exception_invalid_method() {
+        String td_error = "Invalid HTTP method: PATCH";
+        // creating user entity for put
+        UserDto entity = new UserDto();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> putEntity = new HttpEntity<>(entity, headers);
+
+        try {
+            restTemplate.exchange(path + "/" + 101, HttpMethod.PATCH,
+                    putEntity, String.class);
+            // if above does not throw and exception, something wis wrong, fail the test
+            assertTrue("user_tc0013_updateUserById_exception_method_not_supported - FAILED:", false);
+        } catch (ResourceAccessException ex) {
+            assertThat(ex.getMessage(), containsString(td_error));
+        }
+    }
+
+    @Test
+    public void user_tc0014_updateUserById_exception_patch() throws JsonProcessingException {
+        String td_UserId = "102";
+        String td_ErrorDetails = "Request method 'POST' not supported";
+        String td_Message = "from handleHttpRequestMethodNotSupported in method";
+
+        // creating user entity for put
+        UserDto entity = new UserDto();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> putEntity = new HttpEntity<>(entity, headers);
+
+        // make a post call and set patch in the url path due to bug with restTemplate and patch function
+        ResponseEntity<String> response = restTemplate.postForEntity(path + "/" + td_UserId + "?_method=patch",
+                entity, String.class);
+
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_ErrorDetails, node.get("error_details").asText());
+        assertEquals(td_Message, node.get("message").asText());
+    }
+
+    @Test
+    public void user_tc0015_getByUserId_exception_constraint() throws JsonProcessingException {
+        String td_UserId = "0";
+        String td_ErrorDetails = "getUserById.id: must be greater than or equal to 1";
+        String td_Message = "from handleConstraintViolationException in method";
+
+        ResponseEntity<String> response = restTemplate.getForEntity(path + "/" + td_UserId, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_ErrorDetails, node.get("error_details").asText());
+        assertEquals(td_Message, node.get("message").asText());
+    }
+
+    @Test
+    public void user_tc0016_updateUserById_exception_constraint() throws JsonProcessingException {
+        String td_UserId = "0";
+        String td_ErrorDetails = "updateUserById.id: must be greater than or equal to 1";
+        String td_Message = "from handleConstraintViolationException in method";
+
+        // creating user entity for put
+        UserDto entity = new UserDto();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<UserDto> putEntity = new HttpEntity<>(entity, headers);
+
+        // make a post call and set patch in the url path due to bug with restTemplate and patch function
+        ResponseEntity<String> response = restTemplate.exchange(path + "/" + td_UserId, HttpMethod.PUT,
+                putEntity, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_ErrorDetails, node.get("error_details").asText());
+        assertEquals(td_Message, node.get("message").asText());
+    }
+    @Test
+    public void user_tc0017_deleteUserById_exception_constraint() throws JsonProcessingException {
+        String td_UserId = "0";
+        String td_ErrorDetails = "deleteUserById.id: must be greater than or equal to 1";
+        String td_Message = "from handleConstraintViolationException in method";
+        // delete record
+        ResponseEntity<String> response = restTemplate.exchange(path + "/" + td_UserId,
+                HttpMethod.DELETE, new HttpEntity<String>(null, new HttpHeaders()), String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // getting the response body
+        String body = response.getBody();
+        // get fields from JSON using Jackson Object Mapper
+        final ObjectNode node = new ObjectMapper().readValue(body, ObjectNode.class);
+        // assert expected vs actual
+        assertEquals(td_ErrorDetails, node.get("error_details").asText());
+        assertEquals(td_Message, node.get("message").asText());
     }
 }

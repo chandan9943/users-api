@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("users/v1")
 public class UserController {
@@ -46,7 +49,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto, UriComponentsBuilder builder) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto, UriComponentsBuilder builder) {
         try {
             UserDto returnDto = userService.createUser(userDto);
             HttpHeaders headers = new HttpHeaders();
@@ -59,7 +62,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateUserById(@PathVariable("id") Long id, @RequestBody UserDto user) {
+    public void updateUserById(@PathVariable("id") @Min(1) Long id, @RequestBody UserDto user) {
         try {
             userService.updateUserById(id, user);
         } catch (UserNotFoundException ex) {
@@ -69,7 +72,7 @@ public class UserController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(@PathVariable("id") Long id) {
+    public void deleteUserById(@PathVariable("id") @Min(1) Long id) {
         userService.deleteUserById(id);
     }
 }

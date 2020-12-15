@@ -1,12 +1,30 @@
 package com.sdet.auto.users.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class UserDto {
 
     private Long id;
+
+    @NotEmpty(message="user_name is a required field.  Please provide a user_name")
+    @Size(min=2, message="user_name should contain at least 2 characters")
     private String user_name;
+
+    @NotEmpty(message="first_name is a required field.  Please provide a first_name")
+    @Size(min=2, message="first_name should contain at least 2 characters")
     private String first_name;
+
+    @NotEmpty(message="last_name is a required field.  Please provide a last_name")
+    @Size(min=2, message="last_name should contain at least 2 characters")
     private String last_name;
+
+    @NotEmpty(message="email is a required field.  Please provide a email")
+    @Size(min=2, message="email should contain at least 2 characters")
     private String email;
+
+    @NotEmpty(message="role is a required field.  Please provide a role")
+    @Size(min=2, message="role should contain at least 2 characters")
     private String role;
 
     public UserDto() {
