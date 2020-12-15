@@ -23,3 +23,10 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
 3) Build and Run app to verify app is working
 4) Add CI: using github actions for ci
 
+#### 01-hello-world 
+1) Create java class and add hello world code
+2) Create a test for hello world endpoint
+3) Add dependencies build.gradle. also add test logging to build.gradle
+
+
+
