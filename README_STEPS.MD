@@ -316,4 +316,21 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - test doc from http://localhost:8080/v2/api-docs @ https://editor.swagger.io/
     
         - swagger should render without issue when pasting raw json into the swagger editor
+        
+5) auto populate documentation for JSR-303 Validations
 
+    - JSR-303 Spec: https://beanvalidation.org/1.0/spec
+
+    - add dependency in build.gradle
+   
+   ```
+   implementation 'io.springfox:springfox-bean-validators:2.9.2'
+   ```
+    - go to UserDto
+        - add @Size(min=2, max=50, ...) to user_name, first_name, last_name, email, role
+   
+    - @Import(BeanValidatorPluginsConfiguration.class) on top of the swagger configuration
+        - go to SwaggerConfig add @Import(BeanValidatorPluginsConfiguration.class) at the class level
+        
+    - verify Models in Swagger UI
+        - Users Model should have min max defined for user_name, first_name, last_name, email, role
