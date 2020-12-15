@@ -375,3 +375,17 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
 
     - then navigate to http://localhost:8080/actuator to see the available endpoints
     
+2) configure actuators endpoints and verify Health endpoint
+
+    - go to application.properties add the following
+        ```
+        management.endpoints.web.exposure.include=info, health, metrics
+        management.endpoint.health.show-details=always
+        info.greeting=welcome to sdetAuto's Api
+        info.hello=hello world
+
+        ```
+
+
+
+
