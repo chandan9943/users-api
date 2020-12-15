@@ -276,13 +276,27 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
    ```
-    
+   
 2) create SwaggerConfig file
+
     - annotate with @Configuration
+
     - annotate with @EnableSwagger2
+
     - create a Docket bean and annotate with @Bean
+
     - swagger metadata URL
+        
         - http://localhost:8080/v2/api-docs
+        
         - verify swagger yml online at https://editor.swagger.io/
+    
     - swagger ui url
+    
         - http://localhost:8080/swagger-ui.html
+        
+3) add API info to modify header of our documentation
+    
+    - create a new class "AppInfo" within our SwaggerConfig class
+    
+    - update the Docket bean with AppInfo getUserApiInfo
