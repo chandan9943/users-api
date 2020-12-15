@@ -300,3 +300,20 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - create a new class "AppInfo" within our SwaggerConfig class
     
     - update the Docket bean with AppInfo getUserApiInfo
+
+4) restrict scope of swagger documentation generation using API base packages and paths
+    
+    - update base package in RequestHandlerSelectors.basepackage
+    
+        - go to UsersApplication class and copy the package name from the top of the class
+    
+        - go to SwaggerConfig change Docket .apis(RequestHandlerSelectors.basePackage("com.sdet.auto.users"))
+        
+    - update PathSelectors.ant("/users/**) to limit to specific paths
+    
+        - .paths(PathSelectors.ant("/users/**")
+        
+    - test doc from http://localhost:8080/v2/api-docs @ https://editor.swagger.io/
+    
+        - swagger should render without issue when pasting raw json into the swagger editor
+

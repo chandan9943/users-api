@@ -19,8 +19,8 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(getApiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.sdet.auto.users"))
+                .paths(PathSelectors.ant("/users/**"))
                 .build();
     }
 
