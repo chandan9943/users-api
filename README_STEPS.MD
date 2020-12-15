@@ -84,7 +84,7 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
      - unit test createUser 
         
         - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests. (UserRepositoryTests - 
-            not necessary, create / save function already used in test setUp)
+            not necessary, create / save function already used in test)
            
 #### 04-get-by-user-id 
 1) Implement getUserById @GetMapping
@@ -125,3 +125,17 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - unit test getUserByUsername
     
         - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, UserRepositoryTests
+
+#### 06-update-by-user-id
+1) Implement updateUserById @PutMapping
+
+    - go to UserService create method for updateUserById
+
+    - go to UserController create method for updateUserById
+
+        - add @PathVariable for id input, add @RequestBody for json body input
+
+    - unit test updateByUserId
+    
+        - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, (UserRepositoryTests - 
+            not necessary, create / save function already used in test)

@@ -25,6 +25,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -204,6 +205,26 @@ public class UserServiceImplTests {
 
         try {
             userService.getUserByUsername(td_userName2);
+        } catch (UserNotFoundException ex) {
+            assertEquals(td_error_message, ex.getMessage());
+        }
+    }
+
+    @Test
+    public void user_service_tc0008_updateUserById() throws UserNotFoundException {
+        // since Mockito.when(userRepository.findById(any(Long.class))).thenReturn(java.util.Optional.of(user1));
+        // is defined up top, as long as you set an id below it will get a mocked user within updateUserById method
+        userService.updateUserById(1L, new UserDto());
+        // checking if userRepository.save() was invoked within the updateUserById method
+        Mockito.verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    public void user_service_tc0009_updateUserById_exception() throws UserNotFoundException {
+        String td_error_message = "User not found in User Repository";
+        try {
+            // passing a null to the function below, since its not a long, will cause a user not found
+            userService.updateUserById(null, new UserDto());
         } catch (UserNotFoundException ex) {
             assertEquals(td_error_message, ex.getMessage());
         }

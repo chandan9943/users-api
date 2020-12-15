@@ -15,4 +15,6 @@ public interface UserService {
     UserDto getUserByUsername(String username) throws UserNotFoundException;
 
     UserDto createUser(UserDto user) throws UserExistsException;
+
+    void updateUserById(Long id, UserDto userDto) throws UserNotFoundException;
 }
