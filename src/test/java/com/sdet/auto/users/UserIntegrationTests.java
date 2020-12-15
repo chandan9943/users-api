@@ -52,7 +52,7 @@ public class UserIntegrationTests {
         String td_LastName = "woman";
         String td_Email = "wonder.woman@gmail.com";
         String td_Role = "admin";
-        String td_header = "/users/";
+        String td_header = "/users/v1/";
 
         UserDto entity = new UserDto(null, td_UserName, td_FirstName, td_LastName, td_Email, td_Role);
         ResponseEntity<UserDto> response = restTemplate.postForEntity(path, entity, UserDto.class);

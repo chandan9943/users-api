@@ -266,3 +266,95 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - create unit test check if patch throws exception
         
         - add constraint tests for - getUserById, updateUserById, deleteUserById
+
+#### 09-swagger
+
+- swagger is used to document an api, and helps users understand how to implement their client apps
+
+1) add springfox dependencies to build.gradle - due to bug with 3.0.0 with swagger-ui using older version
+   ```
+	implementation 'io.springfox:springfox-swagger2:2.9.2'
+	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+   ```
+   
+2) create SwaggerConfig file
+
+    - annotate with @Configuration
+
+    - annotate with @EnableSwagger2
+
+    - create a Docket bean and annotate with @Bean
+
+    - swagger metadata URL
+        
+        - http://localhost:8080/v2/api-docs
+        
+        - verify swagger yml online at https://editor.swagger.io/
+    
+    - swagger ui url
+    
+        - http://localhost:8080/swagger-ui.html
+        
+3) add API info to modify header of our documentation
+    
+    - create a new class "AppInfo" within our SwaggerConfig class
+    
+    - update the Docket bean with AppInfo getUserApiInfo
+
+4) restrict scope of swagger documentation generation using API base packages and paths
+    
+    - update base package in RequestHandlerSelectors.basepackage
+    
+        - go to UsersApplication class and copy the package name from the top of the class
+    
+        - go to SwaggerConfig change Docket .apis(RequestHandlerSelectors.basePackage("com.sdet.auto.users"))
+        
+    - update PathSelectors.ant("/users/**) to limit to specific paths
+    
+        - .paths(PathSelectors.ant("/users/**")
+        
+    - test doc from http://localhost:8080/v2/api-docs @ https://editor.swagger.io/
+    
+        - swagger should render without issue when pasting raw json into the swagger editor
+        
+5) auto populate documentation for JSR-303 Validations
+
+    - JSR-303 Spec: https://beanvalidation.org/1.0/spec
+
+    - add dependency in build.gradle
+   
+   ```
+   implementation 'io.springfox:springfox-bean-validators:2.9.2'
+   ```
+    - go to UserDto
+        - add @Size(min=2, max=50, ...) to user_name, first_name, last_name, email, role
+   
+    - @Import(BeanValidatorPluginsConfiguration.class) on top of the swagger configuration
+        - go to SwaggerConfig add @Import(BeanValidatorPluginsConfiguration.class) at the class level
+        
+    - verify Models in Swagger UI
+        - Users Model should have min max defined for user_name, first_name, last_name, email, role
+        
+6) add swagger Core annotation to dto class
+
+    - go to UserDto Class add annotation at class level
+
+    - add field level annotations: notes, required, position, position (will default if position not set)
+    
+7) add swagger Core annotation to Controller Class
+
+    - controller
+
+        -@Api(tag = "Use Management RESTful Services", value = "UserController")
+
+    - method level
+
+        - @ApiOperation(value = "create a new user")
+
+    - parameter level
+
+        - @ApiParam("User information for a new user created)
+
+    - produces / responses within the swagger yml
+
+        - add produces within a mapping.  Example: @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
