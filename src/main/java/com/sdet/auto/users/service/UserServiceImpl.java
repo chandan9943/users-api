@@ -60,6 +60,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getUserByUsername(String username) throws UserNotFoundException {
+        User user = userRepository.findByUsername(username);
+
+        // if does not exists, throws an exception
+        if(user == null){
+            throw new UserNotFoundException("User not found in User Repository");
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setUser_name(user.getUsername());
+        userDto.setFirst_name(user.getFirstname());
+        userDto.setLast_name(user.getLastname());
+        userDto.setEmail(user.getEmail());
+        userDto.setRole(user.getRole());
+
+        return userDto;
+    }
+
+    @Override
     public UserDto createUser(UserDto userDto) throws UserExistsException {
         // logic to check repository if user is present
         User existingUser = userRepository.findByUsername(userDto.getUser_name());

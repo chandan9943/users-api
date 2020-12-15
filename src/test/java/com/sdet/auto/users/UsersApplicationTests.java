@@ -17,7 +17,12 @@ public class UsersApplicationTests {
 	private UserController userController;
 
 	@Test
-	public void contextLoads() {
+	public void app_tc0001_contextLoads() {
 		assertNotNull(userController);
+	}
+
+	@Test
+	public void app_tc0002_applicationContextTest() {
+		UsersApplication.main(new String[] {});
 	}
 }

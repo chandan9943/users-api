@@ -163,12 +163,47 @@ public class UserServiceImplTests {
     }
 
     @Test
-    public void User_Service_tc0005_getUserById_exception() {
+    public void user_service_tc0005_getUserById_exception() {
         Long td_id1 = 999L;
         String td_error_message = "User not found in User Repository";
 
         try {
             userService.getUserById(td_id1);
+        } catch (UserNotFoundException ex) {
+            assertEquals(td_error_message, ex.getMessage());
+        }
+    }
+
+    @Test
+    public void user_service_tc0006_getUserByUsername() throws UserNotFoundException {
+        Long td_id2 = 222L;
+        String td_userName2 = "td_userName2";
+        String td_firstName2 = "td_firstName2";
+        String td_lastName2 = "td_lastName2";
+        String td_email2 = "td_email2";
+        String td_role2 = "td_role2";
+
+        User user2 = new User(td_id2, td_userName2, td_firstName2, td_lastName2, td_email2, td_role2);
+
+        Mockito.when(userRepository.findByUsername(any(String.class))).thenReturn(user2);
+
+        UserDto users = userService.getUserByUsername(td_userName2);
+
+        assertEquals(users.getId(), td_id2);
+        assertEquals(users.getUser_name(), td_userName2);
+        assertEquals(users.getFirst_name(), td_firstName2);
+        assertEquals(users.getLast_name(), td_lastName2);
+        assertEquals(users.getEmail(), td_email2);
+        assertEquals(users.getRole(), td_role2);
+    }
+
+    @Test
+    public void user_service_tc0007_getUserByUsername_exception() {
+        String td_userName2 = "td_userName2";
+        String td_error_message = "User not found in User Repository";
+
+        try {
+            userService.getUserByUsername(td_userName2);
         } catch (UserNotFoundException ex) {
             assertEquals(td_error_message, ex.getMessage());
         }

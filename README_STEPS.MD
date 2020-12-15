@@ -108,3 +108,20 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - unit test getUserById
     
         - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, UserRepositoryTests
+        
+#### 05-get-by-username
+1) implement getUserByUsername @GetMapping
+
+    - go to UserRepository add method for findByUsername (custom method)
+
+        - see notes added to this method
+
+    - go to UserService create method getUserByUsername and implement UserServiceImpl
+
+    - go to UserController create method for getUserByUsername
+
+        - add @GetMapping("/byusername/{username}") - note path has addition, since searching by string vs Long
+
+    - unit test getUserByUsername
+    
+        - add test for: UserIntegrationTests, UserControllerTests, UserServiceImplTests, UserRepositoryTests
