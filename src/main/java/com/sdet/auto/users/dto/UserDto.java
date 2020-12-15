@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @ApiModel("This model is used to create a user record")
 public class UserDto {
 
-    @ApiModelProperty(notes = "Auto generated unique id", required = true, position = 1)
+    @ApiModelProperty(notes = "Auto generated unique id", required = true, position = 1, hidden = true)
     private Long id;
 
     @ApiModelProperty(notes = "user_name should contain more than 1 character", example = "user.name", required = true, position = 2)
