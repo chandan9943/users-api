@@ -421,9 +421,26 @@ histograms, and sla boundary counts
     implementation 'io.micrometer:micrometer-core'
     ```
 
-- simple (in memory backend - fall back option) - by default is enabled
-
-    - to disable: `management.metrics.export.simple.enabled=false`
-
-    - http://localhost:8080/actuator/metrics/http.server.requests
+    - simple (in memory backend - fall back option) - by default is enabled
     
+        - to disable: `management.metrics.export.simple.enabled=false`
+    
+        - http://localhost:8080/actuator/metrics/http.server.requests
+    
+2) integrate with JMX nd view metrics in JConsole using JMX.  Add JMX dependency
+    
+    ```
+    implementation 'io.micrometer:micrometer-registry-jmx'
+    ```
+    
+    - add `management.metrics.export.jmx.enabled=true` to application.properties
+    
+    - to view JConsole
+    
+        - first start the application
+    
+        - then from a terminal type `jconsole`
+    
+        - in the jconsole window select your api solution, then click Connect
+    
+        - to see metrics nav to: MBeans > Metrics > you will see all the different metrics
