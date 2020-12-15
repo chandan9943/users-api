@@ -1,28 +1,38 @@
 package com.sdet.auto.users.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+@ApiModel("This model is used to create a user record")
 public class UserDto {
 
+    @ApiModelProperty(notes = "Auto generated unique id", required = true, position = 1)
     private Long id;
 
+    @ApiModelProperty(notes = "user_name should contain more than 1 character", example = "sdet.auto", required = true, position = 2)
     @NotEmpty(message="user_name is a required field.  Please provide a user_name")
     @Size(min=2, max=50, message="user_name should contain at least 2 characters")
     private String user_name;
 
+    @ApiModelProperty(required = true, position = 3)
     @NotEmpty(message="first_name is a required field.  Please provide a first_name")
     @Size(min=2, max=50, message="first_name should contain at least 2 characters")
     private String first_name;
 
+    @ApiModelProperty(required = true, position = 4)
     @NotEmpty(message="last_name is a required field.  Please provide a last_name")
     @Size(min=2, max=50, message="last_name should contain at least 2 characters")
     private String last_name;
 
+    @ApiModelProperty(required = true, position = 5)
     @NotEmpty(message="email is a required field.  Please provide a email")
     @Size(min=2, max=50, message="email should contain at least 2 characters")
     private String email;
 
+    @ApiModelProperty(required = true, position = 6)
     @NotEmpty(message="role is a required field.  Please provide a role")
     @Size(min=2, max=50, message="role should contain at least 2 characters")
     private String role;

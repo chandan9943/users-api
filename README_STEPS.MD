@@ -334,3 +334,9 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
         
     - verify Models in Swagger UI
         - Users Model should have min max defined for user_name, first_name, last_name, email, role
+        
+6) add swagger Core annotation to dto class
+
+    - go to UserDto Class add annotation at class level
+
+    - add field level annotations: notes, required, position, position (will default if position not set)
