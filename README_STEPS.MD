@@ -358,3 +358,20 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - produces / responses within the swagger yml
 
         - add produces within a mapping.  Example: @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+
+#### 10-actuator
+
+- monitor and manage spring boot applications using REST/JMX Actuator endpoints
+
+- endpoints offer: health, metrics monitoring, access to logs, thread dumps, heap dumps, environmental info, and more...
+
+1) add spring boot actuator dependency in build.gradle
+
+    ```
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    ```
+
+    - next start the app
+
+    - then navigate to http://localhost:8080/actuator to see the available endpoints
+    
