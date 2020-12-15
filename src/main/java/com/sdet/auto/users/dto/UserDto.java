@@ -1,5 +1,6 @@
 package com.sdet.auto.users.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 @ApiModel("This model is used to create a user record")
 public class UserDto {
 
+    @JsonIgnore
     @ApiModelProperty(notes = "Auto generated unique id", required = true, position = 1)
     private Long id;
 
