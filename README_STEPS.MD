@@ -358,3 +358,45 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
     - produces / responses within the swagger yml
 
         - add produces within a mapping.  Example: @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+
+#### 10-actuator
+
+- monitor and manage spring boot applications using REST/JMX Actuator endpoints
+
+- endpoints offer: health, metrics monitoring, access to logs, thread dumps, heap dumps, environmental info, and more...
+
+1) add spring boot actuator dependency in build.gradle
+
+    ```
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    ```
+
+    - next start the app
+
+    - then navigate to http://localhost:8080/actuator to see the available endpoints
+    
+2) configure actuators endpoints and verify Health endpoint
+
+    - go to application.properties add the following
+        ```
+        management.endpoints.web.exposure.include=info, health, metrics
+        management.endpoint.health.show-details=always
+        info.greeting=welcome to sdetAuto's Api
+        info.hello=hello world
+
+        ```
+      
+3) build info - populate build-info for info endpoint
+
+    - the actuator automatically publishes information about your build in the presence of a 
+        META-INF/build-info.properties file. A BuildInfo task is needed to generate this file. 
+        The easiest way to use the task and add it to your build.gradle
+        
+    ```
+       springBoot {
+        buildInfo()
+       }
+    ```
+   
+   - to see the build information, build and start your app and navigate to: `http://localhost:8080/actuator/info`
+
