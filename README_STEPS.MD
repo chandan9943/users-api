@@ -385,7 +385,18 @@ java -jar ./build/libs/users-0.0.1-SNAPSHOT.jar
         info.hello=hello world
 
         ```
+      
+3) build info - populate build-info for info endpoint
 
-
-
+    - the actuator automatically publishes information about your build in the presence of a 
+        META-INF/build-info.properties file. A BuildInfo task is needed to generate this file. 
+        The easiest way to use the task and add it to your build.gradle
+        
+    ```
+       springBoot {
+        buildInfo()
+       }
+    ```
+   
+   - to see the build information, build and start your app and navigate to: `http://localhost:8080/actuator/info`
 
