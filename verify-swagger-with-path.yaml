@@ -1,0 +1,253 @@
+swagger: '2.0'
+info:
+  description: This page lists all User Api's
+  version: '2.0'
+  title: verify
+host: verify.apigateway.excelsiordev.cloud.goog
+schemes:
+  - https
+securityDefinitions:
+   APIKeyQueryParam:
+     type: apiKey
+     in: query
+     name: api_key
+tags:
+  - name: User RESTful Api
+    description: User Controller
+paths:
+  /users/v1:
+    get:
+      tags:
+        - User RESTful Api
+      summary: retrieves a list of users
+      operationId: getAllUsersUsingGET
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/This%20model%20is%20used%20to%20create%20a%20user%20record'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+      x-google-backend:
+        address: https://users-api-qux2jqr2rq-uk.a.run.app
+        protocol: h2
+        path_translation: APPEND_PATH_TO_ADDRESS
+      security:
+        - APIKeyQueryParam: []
+    post:
+      tags:
+        - User RESTful Api
+      summary: creates a user
+      operationId: createUserUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: user
+          description: User fields to create a new user
+          required: false
+          schema:
+            $ref: '#/definitions/This%20model%20is%20used%20to%20create%20a%20user%20record'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/This%20model%20is%20used%20to%20create%20a%20user%20record'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+      x-google-backend:
+        address: https://users-api-qux2jqr2rq-uk.a.run.app
+        protocol: h2
+        path_translation: APPEND_PATH_TO_ADDRESS
+      security:
+        - APIKeyQueryParam: []
+  '/users/v1/byusername/{username}':
+    get:
+      tags:
+        - User RESTful Api
+      summary: find a user by username
+      operationId: getUserByUsernameUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: username
+          in: path
+          description: username
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/This%20model%20is%20used%20to%20create%20a%20user%20record'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+      x-google-backend:
+        address: https://users-api-qux2jqr2rq-uk.a.run.app
+        protocol: h2
+        path_translation: APPEND_PATH_TO_ADDRESS
+      security:
+        - APIKeyQueryParam: []
+  '/users/v1/{id}':
+    get:
+      tags:
+        - User RESTful Api
+      summary: get a user by id
+      operationId: getUserByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          minimum: 1
+          exclusiveMinimum: false
+          format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/This%20model%20is%20used%20to%20create%20a%20user%20record'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+      x-google-backend:
+        address: https://users-api-qux2jqr2rq-uk.a.run.app
+        protocol: h2
+        path_translation: APPEND_PATH_TO_ADDRESS
+      security:
+        - APIKeyQueryParam: []
+    put:
+      tags:
+        - User RESTful Api
+      summary: update a user
+      operationId: updateUserByIdUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          minimum: 1
+          exclusiveMinimum: false
+          format: int64
+        - in: body
+          name: user
+          description: user
+          required: true
+          schema:
+            $ref: '#/definitions/This%20model%20is%20used%20to%20create%20a%20user%20record'
+      responses:
+        '201':
+          description: Created
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+      x-google-backend:
+        address: https://users-api-qux2jqr2rq-uk.a.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        protocol: h2
+      security:
+        - APIKeyQueryParam: []
+    delete:
+      tags:
+        - User RESTful Api
+      summary: delete a user
+      operationId: deleteUserByIdUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          minimum: 1
+          exclusiveMinimum: false
+          format: int64
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      deprecated: false
+      x-google-backend:
+        address: https://users-api-qux2jqr2rq-uk.a.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        protocol: h2
+      security:
+        - APIKeyQueryParam: []
+definitions:
+  This model is used to create a user record:
+    type: object
+    required:
+      - email
+      - first_name
+      - last_name
+      - role
+      - user_name
+    properties:
+      user_name:
+        type: string
+        example: user.name
+        description: user_name should contain more than 1 character
+        minLength: 2
+        maxLength: 50
+      first_name:
+        type: string
+        minLength: 2
+        maxLength: 50
+      last_name:
+        type: string
+        minLength: 2
+        maxLength: 50
+      email:
+        type: string
+        minLength: 2
+        maxLength: 50
+      role:
+        type: string
+        minLength: 2
+        maxLength: 50
+    title: This model is used to create a user record
