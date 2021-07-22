@@ -21,6 +21,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(getApiInfo())
+                .forCodeGeneration(true)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.sdet.auto.users"))
                 .paths(PathSelectors.ant("/users/**"))
@@ -32,12 +33,9 @@ public class SwaggerConfig {
 
     private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
-                .title("sdetAutomation's User Api")
+                .title("User Api")
                 .description("This page lists all User Api's")
                 .version("2.0")
-                .contact(new Contact("sdetAutomation", "https://github.com/sdetAutomation/", "sdet.testautomation@gmail.com"))
-                .license("MIT License")
-                .licenseUrl("https://github.com/sdetAutomation/users-api/blob/main/LICENSE")
                 .build();
     }
 }
